@@ -22,13 +22,13 @@
 	
           user=$("#user").val();
           pass=$("#password").val();
-          $.get("https://warm-ridge-67298.herokuapp.com//api/users/"+user+"&"+ pass, function(data){
+          $.get("https://warm-ridge-67298.herokuapp.com/api/users/"+user+"&"+ pass, function(data){
             //alert(data.Users.length);
 			if(data.Users.length != 0)
               {
 			  console.log(data.Users[0].user_id);
 			  loggeduserid = data.Users[0].user_id;
-    			$.get("https://warm-ridge-67298.herokuapp.com//api/users/loguserdetails/"+data.Users[0].user_id,function(data){
+    			$.get("https://warm-ridge-67298.herokuapp.com/api/users/loguserdetails/"+data.Users[0].user_id,function(data){
 						$('#hideafterlogin').hide();
 						$('#insertlead').show();
 				console.log(data);
@@ -50,7 +50,7 @@
           fname=$("#leadfname").val();
           phone=$("#leadphone").val();
 		  email=$("#email").val();
-          $.get("https://warm-ridge-67298.herokuapp.com//api/users/insertlead/"+fname+"&"+ phone+"&"+email+"&"+loggeduserid, function(data){
+          $.get("https://warm-ridge-67298.herokuapp.com/api/users/insertlead/"+fname+"&"+ phone+"&"+email+"&"+loggeduserid, function(data){
           alert('Lead Added Successufully');  
 	$('#mytbody').append('<tr>'+"<td>"+fname+"</td>"+"<td>"+phone+"</td>"+"<td>"+email+"</td>"+"</tr>");
 		//	table.draw();		 
