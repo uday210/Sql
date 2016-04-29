@@ -1,0 +1,129 @@
+<html>
+  <head>
+    <title>Simple login</title>
+	<link rel='stylesheet' href='https://cdn.datatables.net/1.10.11/css/jquery.dataTables.min.css'/>
+<link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.6/css/bootstrap.min.css" integrity="sha384-1q8mTJOASx8j1Au+a5WDVnPi2lkFfwwEAa8hDDdjZlpLegxhjVME1fgjWPGmkzs7" crossorigin="anonymous">
+
+<!-- Optional theme -->
+<link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.6/css/bootstrap-theme.min.css" integrity="sha384-fLW2N01lMqjakBkx3l/M9EahuwpSfeNvV63J5ezn3uZzapT0u7EYsXMjQV+0En5r" crossorigin="anonymous">
+   <script src="http://ajax.googleapis.com/ajax/libs/jquery/2.1.1/jquery.min.js">  </script>
+ 
+<!-- Latest compiled and minified JavaScript -->
+<script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.6/js/bootstrap.min.js" integrity="sha384-0mSbJDEHialfmuBBQP6A4Qrprq5OVfW37PRR3j5ELqxss1yVqOtnepnHVP9aJ7xS" crossorigin="anonymous"></script>
+<script src='https://cdn.datatables.net/1.10.11/js/jquery.dataTables.min.js'> </script>
+ <script>
+ var table;
+      $(document).ready(function(){
+	  alert( location.hostname);
+	    var user,pass;
+		var loggeduserid ;
+		
+        $("#submit").click(function(){
+	
+          user=$("#user").val();
+          pass=$("#password").val();
+          $.get("http://localhost:3000/api/users/"+user+"&"+ pass, function(data){
+            //alert(data.Users.length);
+			if(data.Users.length != 0)
+              {
+			  console.log(data.Users[0].user_id);
+			  loggeduserid = data.Users[0].user_id;
+    			$.get("http://localhost:3000/api/users/loguserdetails/"+data.Users[0].user_id,function(data){
+						$('#hideafterlogin').hide();
+						$('#insertlead').show();
+				console.log(data);
+				for(var i=0;i<data.Users.length;i++){
+				$('#mytbody').append('<tr>'+"<td>"+data.Users[i].Lead_name+"</td>"+"<td>"+data.Users[i].Lead_name+"</td>"+"<td>"+data.Users[i].Lead_email+"</td>"+"</tr>");
+				}
+			table = 	$('#example').DataTable( {
+                   
+                } );
+				});
+              }
+          });
+        });
+		
+		
+		//insert lead details
+		var fname,lname,email;
+		   $("#save_lead").click(function(){
+          fname=$("#leadfname").val();
+          phone=$("#leadphone").val();
+		  email=$("#email").val();
+          $.get("http://localhost:3000/api/users/insertlead/"+fname+"&"+ phone+"&"+email+"&"+loggeduserid, function(data){
+          alert('Lead Added Successufully');  
+	$('#mytbody').append('<tr>'+"<td>"+fname+"</td>"+"<td>"+phone+"</td>"+"<td>"+email+"</td>"+"</tr>");
+		//	table.draw();		 
+		 $("#leadfname").val('');
+          $("#leadphone").val('');
+		  $("#email").val('');
+		  
+          });
+        });
+      });
+    </script>
+  </head>
+  <body>
+  
+  
+  
+  
+  <div id='hideafterlogin'>
+    <h1>Hello people !</h1>
+    <input type="TEXT" id="user" size="40"><br>
+    <input type="password" id="password" size="40"><br>
+    <input type="button" id="submit" value="Submit">
+	
+   </div>
+	
+	
+	<div id='insertlead' style="display:none">
+     <h1>Enter Lead Details</h1>
+	 <div class="form-group col-sm-12 " >
+	 <div class="form-group col-lg-1 " >
+                  <label for="leadfname" class=""control-label" >First name:</label></div>
+<div class="form-group col-sm-4 " >     
+	 <input type="TEXT" id="leadfname" name='leadfname' size="40" class='form-control'>
+	 </div>
+	 </div>
+	 <div class="form-group col-sm-12 " >
+	 <div class="form-group col-lg-1 " >
+                  <label for="leadphone" class=" control-label" >Phone:</label></div>
+	 <div class='form-group col-sm-4 '>
+      <input type="TEXT" id="leadphone" name='leadphone' size="40" class='form-control'>
+	 
+	 </div></div>
+	 <div class="form-group col-sm-12 " >
+	 <div class="form-group col-lg-1" >
+                  <label for="email" class="control-label" >Email:</label></div>
+	 <div class='form-group col-sm-4 '>
+      <input type="TEXT" id="email" name='email' size="40" class='form-control'>
+	 
+	 </div></div>
+     
+	 <input type="button" id="save_lead" class='btn btn-info'value="save lead">
+	 
+	 
+	 <div class="form-group col-sm-12 " style="padding-top:50px;width:70%" >
+	 
+	<!-----table----------->
+<table id="example" class="display" cellspacing="0" width="100%">
+        <thead>
+            <tr>
+                <th>Lead Name</th>
+               <th>Lead Phone</th>
+               <th>Lead Email</th>
+               
+            </tr>
+        </thead>
+		<tbody id='mytbody'>
+		
+		</tbody>
+      
+    </table>
+<!-----end of table------->	
+	</div>
+	</div>
+  </body>
+  
+</html>
